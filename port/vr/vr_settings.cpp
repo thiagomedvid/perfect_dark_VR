@@ -24,6 +24,11 @@ extern "C" void vrSettingsSave(void)
     fprintf(f, "StickClickToCrouch=%d\n", VrStickClickToCrouch ? 1 : 0);
     fprintf(f, "UseSnapTurn=%d\n", VrUseSnapTurn ? 1 : 0);
     fprintf(f, "TwoHandedAiming=%d\n", VrTwoHandAim ? 1 : 0);
+    fprintf(f, "; Your standing EYE height in cm -- where your eyes are off the floor, which is\n");
+    fprintf(f, "; what the headset reports, roughly 13 cm below the top of your head. Set it from\n");
+    fprintf(f, "; the live reading beside the menu slider rather than from your stature.\n");
+    fprintf(f, "PlayerHeight=%.1f\n", VrPlayerHeight);
+    fprintf(f, "CharacterHeight=%d\n", VrCharacterHeight ? 1 : 0);
 
     // --- VR hand placement (no menu UI; edit here) --------------------------------------------
     fprintf(f, "\n");
@@ -74,6 +79,7 @@ extern "C" void vrSettingsLoad(void)
             else if (strcmp(key, "StickClickToCrouch") == 0) VrStickClickToCrouch = (ival != 0);
             else if (strcmp(key, "UseSnapTurn") == 0) VrUseSnapTurn = (ival != 0);
             else if (strcmp(key, "TwoHandedAiming") == 0) VrTwoHandAim = (ival != 0);
+            else if (strcmp(key, "CharacterHeight") == 0) VrCharacterHeight = (ival != 0);
             else if (strcmp(key, "FistClench") == 0) VrFistClench = ival;
         }
 
@@ -94,7 +100,11 @@ extern "C" void vrSettingsLoad(void)
                 if (fval > WORLDSCALE_MAX) fval = WORLDSCALE_MAX;
                 VrSetWorldScale = fval;
             }
-
+            else if (strcmp(key, "PlayerHeight") == 0) {
+                if (fval < PLAYERHEIGHT_MIN) fval = PLAYERHEIGHT_MIN;
+                if (fval > PLAYERHEIGHT_MAX) fval = PLAYERHEIGHT_MAX;
+                VrPlayerHeight = fval;
+            }
             else if (strcmp(key, "ArmElbowTuck") == 0) VrArmElbowTuck = fval;
             else if (strcmp(key, "ArmBodyFollow") == 0) VrArmBodyFollow = fval;
             else if (strcmp(key, "GunOffX") == 0) VrGunOffX = fval;
